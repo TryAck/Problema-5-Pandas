@@ -36,16 +36,15 @@ class Alumno:
 
                     if (type(notas) == pd.DataFrame):
                         # Comprobar si las llaves son objetos Asignatura y los valores son enteros o decimales, y validos.
-                        # TODO: Comprobar si no tiene la llave notas para tirar un error de tipo KeyError custom.
                         if (not notas.empty):
                             if ("Asignaturas" in notas.keys() and "Notas" in notas.keys()):
-                                for asignatura in notas["Asignaturas"]:
+                                for asignatura in notas.Asignaturas:
                                     if (not isinstance(asignatura, Asignatura)):
                                         raise TypeError("La columna 'Asignaturas' solo puede contener objetos de tipo Asignatura.")
                                     if (asignatura not in asignaturas):
                                             raise RuntimeError(f"El alumno {nombre} no tiene la asignatura {asignatura.nombre} matriculada, y por lo tanto no puede recibir una nota en ella.")
 
-                                for nota in notas["Notas"]:
+                                for nota in notas.Notas:
                                     if (type(nota) not in [int, float]):
                                         raise TypeError("La columana 'Notas' solo puede tener notas con valores de tipo int o float.")
                                     if (nota < 0 or nota > 10):
@@ -92,7 +91,14 @@ class Alumno:
             if (self.asignaturas[i] == asignaturaInput):
                 if (type(nota) in [int, float]):
                     if (0 <= nota <= 10):
-                        self.notas = pd.concat([self.notas, pd.DataFrame({"Asignaturas": [asignaturaInput], "Notas": [nota]})])
+                        if (self.notas.Asignaturas.eq(asignaturaInput).any()):
+                            # La asignatura ya esta en el DataFrame, actualizar la nota.
+                            
+                            # STUB
+                            pass
+                        else:
+                            # La asignatura no esta en el DataFrame, concatenarla
+                            self.notas = pd.concat([self.notas, pd.DataFrame({"Asignaturas": [asignaturaInput], "Notas": [nota]})])
                     else:
                         print("La nota tiene que estar entre 0 y 10.")
                 else:
