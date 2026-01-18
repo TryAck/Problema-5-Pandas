@@ -34,24 +34,30 @@ class Alumno:
 
                     # La lista solo tiene objetos Asignatura
 
-                    if (type(notas) == dict):
+                    if (type(notas) == pd.DataFrame):
                         # Comprobar si las llaves son objetos Asignatura y los valores son enteros o decimales, y validos.
-                        for asignatura, nota in notas.items():
-                            if (not isinstance(asignatura, Asignatura)):
-                                raise TypeError("Las llaves del diccionario de notas solo pueden ser objetos de tipo Asignatura.")
-                            if (asignatura not in asignaturas):
-                                raise RuntimeError(f"El alumno {nombre} no tiene la asignatura {asignatura.nombre} matriculada, y por lo tanto no puede recibir una nota en ella.")
-                            if (type(nota) not in [int, float]):
-                                raise TypeError("Los valores del diccionario de notas solo pueden ser de tipo int o float.")
-                            if (nota < 0 or nota > 10):
-                                raise ValueError("Las notas dentro del diccionario notas solo pueden estar entre 0 y 10.")
+                        if (not notas.empty):
+                            if ("Asignaturas" in notas.keys() and "Notas" in notas.keys()):
+                                for asignatura in notas.Asignaturas:
+                                    if (not isinstance(asignatura, Asignatura)):
+                                        raise TypeError("La columna 'Asignaturas' solo puede contener objetos de tipo Asignatura.")
+                                    if (asignatura not in asignaturas):
+                                            raise RuntimeError(f"El alumno {nombre} no tiene la asignatura {asignatura.nombre} matriculada, y por lo tanto no puede recibir una nota en ella.")
 
-                        # El diccionario esta correcto
-                        self.nombre = nombre
-                        self.asignaturas = asignaturas
-                        self.notas = pd.DataFrame(data = notas.values(), index = notas.keys(), columns = [nombre])
+                                for nota in notas.Notas:
+                                    if (type(nota) not in [int, float]):
+                                        raise TypeError("La columana 'Notas' solo puede tener notas con valores de tipo int o float.")
+                                    if (nota < 0 or nota > 10):
+                                        raise ValueError("Las notas solo pueden estar entre 0 y 10.")
+
+                            else:
+                                raise KeyError('El DataFrame notas tiene que tener las llaves "Asignatura" y "Notas".')
+                            # El diccionario esta correcto o es vacio
+                            self.nombre = nombre
+                            self.asignaturas = asignaturas
+                            self.notas = notas
                     else:
-                        raise TypeError("La variable notas tiene que ser de tipo Diccionario, con llaves de tipo Asignatura, y notas entre 0 a 10.")
+                        raise TypeError("La variable notas tiene que ser de tipo DataFrame de Pandas, con llave 'Asignaturas' conteniendo objetos Asignatura, y la llave 'Notas' conteniendo notas entre 0 a 10.")
                 else:
                     raise TypeError("La variable asignaturas tiene que ser una lista de objetos tipo Asignatura.")
             else:
@@ -73,20 +79,26 @@ class Alumno:
         else:
             print("La variable asignatura tiene que ser un objeto de tipo Asignatura.")
 
-    def poner_nota(self, asignatura, nota):
-        if (isinstance(asignatura, Asignatura)):
-            # TODO: Crear una nueva fila cuando no este la asignatura en la tabla
-            # TODO: Encontrar la manera de actualizar la nota cuando la asignatura si esta en la tabla
-
+    def poner_nota(self, asignaturaInput, nota):
+        if (isinstance(asignaturaInput, Asignatura)):
+            # TODO: Detectar si la asignatura ya esta con una nota, y si lo esta cambiar la nota en vez de concatenar.
             # Busqueda lineal
             i = 0
-            while (i < len(self.asignaturas) - 1 and self.asignaturas[i].nombre != asignatura.nombre):
-                i += 1
 
-            if (self.asignaturas[i].nombre == asignatura.nombre):
+            while (i < len(self.asignaturas) - 1 and self.asignaturas[i] != asignaturaInput):
+                i += 1
+            
+            if (self.asignaturas[i] == asignaturaInput):
                 if (type(nota) in [int, float]):
                     if (0 <= nota <= 10):
-                        self.notas[asignatura] = nota
+                        if (self.notas.Asignaturas.eq(asignaturaInput).any()):
+                            # La asignatura ya esta en el DataFrame, actualizar la nota.
+                            
+                            # STUB
+                            pass
+                        else:
+                            # La asignatura no esta en el DataFrame, concatenarla
+                            self.notas = pd.concat([self.notas, pd.DataFrame({"Asignaturas": [asignaturaInput], "Notas": [nota]})])
                     else:
                         print("La nota tiene que estar entre 0 y 10.")
                 else:
@@ -187,11 +199,52 @@ bae = Asignatura("Bases de Datos", 260)
 lnd = Asignatura("Lenguajes de Marca", 208)
 ets = Asignatura("Entornos de Desarollo", 156)
 
-aromgon = Alumno("Alejandro", [pro, djk, ets], {pro: 7, djk: 6, ets: 9})
-agongon = Alumno("Andrea", [pro, djk, itk, ssf, bae, lnd, ets], {djk: 7, itk: 6.3, ssf: 10, bae: 4, lnd: 5, ets: 8.5})
-fromgom = Alumno("Fernando", [pro], {pro: 7.8})
-aromchi = Alumno("Alonso", [], {})
+aromgon = Alumno("Alejandro", [pro, djk, ets], pd.DataFrame(
+    {
+        "Asignaturas": [
+            pro,
+            djk,
+            ets
+        ],
 
+        "Notas": [
+            7,
+            6,
+            9
+        ]
+    }
+))
+agongon = Alumno("Andrea", [pro, djk, itk, ssf, bae, lnd, ets], pd.DataFrame(
+    {
+        "Asignaturas": [
+            djk,
+            itk,
+            ssf,
+            bae,
+            lnd,
+            ets
+        ],
+
+        "Notas": [
+            7,
+            6.3,
+            10,
+            4,
+            5,
+            8.5
+        ]
+    }
+))
+fromgom = Alumno("Fernando", [pro], pd.DataFrame(
+    {
+        "Asignaturas": [ pro ],
+        "Notas": [ 7.8 ]
+    }
+))
+
+aromchi = Alumno("Alonso", [], pd.DataFrame({}))
+
+# TODO: Descomentar una vez termine refactorizando
 """
 cifpcm_daw = Instituto([aromgon, agongon, fromgom])
 
