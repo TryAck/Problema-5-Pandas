@@ -130,15 +130,26 @@ class Instituto:
             print("La variable alumno tiene que ser un objeto de tipo Alumno.")
 
     def mostrar_expediente(self):
-        # TODO: Asignar "Sin nota" en las notas cuando haya una asignatura matriculada, pero no tenga nota
-        # TODO: Asignar "No matriculada" en las notas cuando no este matriculada en una asignatura.
-
         # expediente es declarado como DataFrame vacio para poder concatenar las notas
         expediente = pd.DataFrame()
 
         # Concatenacion de notas (axis = 1 especifica que concatene columnas en vez de filas)
         for alumno in self.alumnos:
             expediente = pd.concat([expediente, alumno.notas], axis=1)
+
+        # Pasar el dtype de expediente a string para poder asignar "Sin Nota" y "No Matriculada"
+        expediente = expediente.astype(str)
+
+        # Marcar las asignaturas sin nota y no matriculadas
+        for alumno in self.alumnos:
+            # Obtiene los indices en los cuales haya un valor NaN (Que es mostrado como "nan" por la conversion a string) de la columna del alumno, y itera con ellos.
+            for asignatura_con_nan in expediente[alumno.nombre][expediente[alumno.nombre] == "nan"].index:
+                if (asignatura_con_nan in alumno.asignaturas):
+                    # Si es NaN, pero la asignatura esta matriculada, eso significa que no tiene nota
+                    expediente.loc[asignatura_con_nan, alumno.nombre] = "Sin Nota"
+                else:
+                    # Es NaN, y no esta matriculada
+                    expediente.loc[asignatura_con_nan, alumno.nombre] = "No Matriculada"
 
         # Modificar el indice para mostrar los nombres de las asignaturas en vez de sus objetos
         for asignatura in expediente.index:
