@@ -75,18 +75,20 @@ class Alumno:
 
     def poner_nota(self, asignatura, nota):
         if (isinstance(asignatura, Asignatura)):
-            # TODO: Crear una nueva fila cuando no este la asignatura en la tabla
-            # TODO: Encontrar la manera de actualizar la nota cuando la asignatura si esta en la tabla
-
             # Busqueda lineal
             i = 0
-            while (i < len(self.asignaturas) - 1 and self.asignaturas[i].nombre != asignatura.nombre):
+            while (i < len(self.asignaturas) - 1 and self.asignaturas[i] != asignatura):
                 i += 1
 
-            if (self.asignaturas[i].nombre == asignatura.nombre):
+            if (self.asignaturas[i] == asignatura):
                 if (type(nota) in [int, float]):
                     if (0 <= nota <= 10):
-                        self.notas[asignatura] = nota
+                        if (asignatura in self.notas.index):
+                            # La asignatura ya esta en el DataFrame, actualizar la nota.
+                            self.notas.loc[asignatura, self.nombre] = nota
+                        else:
+                            # La asignatura no esta en el DataFrame, concatenarla junto a la nota.
+                            self.notas = pd.concat([self.notas, pd.DataFrame(data = [nota], index = [asignatura], columns = [self.nombre])])
                     else:
                         print("La nota tiene que estar entre 0 y 10.")
                 else:
@@ -119,65 +121,12 @@ class Instituto:
         else:
             print("La variable alumno tiene que ser un objeto de tipo Alumno.")
 
-    def mostrar_expediente(self, nombre_alumno):
-        if (type(nombre_alumno) == str):
-            if (nombre_alumno != ""):
-                # Busqueda lineal
-                i = 0
-                while (i < len(self.alumnos) - 1 and self.alumnos[i].nombre != nombre_alumno):
-                    i += 1
+    def mostrar_expediente(self):
+        # TODO: Implementar la vista que termina mostrando todos los alumnos
+        # TODO: Hacer que los objetos Asignatura en la tabla muestren su nombre
 
-                if (self.alumnos[i].nombre == nombre_alumno):
-                    # Alumno encontrado
-                    alumno_buscado = self.alumnos[i]
-
-                    # Preparar y mostrar el mensaje de las asignaturas matriculadas.
-                    if (len(alumno_buscado.asignaturas) != 0):
-                        mensaje_asignaturas = f"El alumno {nombre_alumno} tiene las siguientes asignaturas matriculadas: "
-                        asignaturas = alumno_buscado.asignaturas
-                        if (len(asignaturas) > 1):
-                            for indice in range(0, len(asignaturas) - 1):
-                                asignaturaMatriculada = asignaturas[indice]
-                                mensaje_asignaturas += f"{asignaturaMatriculada.nombre} con {asignaturaMatriculada.creditos} de creditos universitarios, "
-
-                            asignaturaMatriculada = asignaturas[len(asignaturas) - 1]
-                            mensaje_asignaturas += f"y {asignaturaMatriculada.nombre} con {asignaturaMatriculada.creditos} de creditos universitarios."
-                            print(mensaje_asignaturas)
-                        else:
-                            print(mensaje_asignaturas + f"{alumno_buscado.asignaturas[0].nombre} con {alumno_buscado.asignaturas[0].creditos} de creditos universitarios.")
-
-                        # Preparar y mostrar el mensaje de las notas.
-                        if (len(alumno_buscado.notas) != 0): 
-                            mensaje_notas = "Tiene las siguientes notas por asignatura: "
-
-                            if (len(alumno_buscado.notas) > 1):
-                                notas = alumno_buscado.notas
-                                for indice in range(0, len(notas) - 1):
-                                    asignaturaConNota = list(notas.keys())[indice]
-                                    nota = notas[asignaturaConNota]
-                                    mensaje_notas += f"{nota} en la asignatura {asignaturaConNota.nombre}, "
-
-                                asignaturaConNota = list(notas.keys())[len(notas) - 1]
-                                nota = notas[asignaturaConNota]
-                                mensaje_notas += f"y {nota} en la asignatura {asignaturaConNota.nombre}."
-                                print(mensaje_notas)
-                            else:
-                                asignaturaConNota = list(alumno_buscado.notas.keys())[0]
-                                nota = alumno_buscado.notas[asignaturaConNota]
-                                print(mensaje_notas + f"{nota} en la asignatura {asignaturaConNota.nombre}.")
-                                
-
-                            alumno_buscado.media()
-                        else:
-                            print("Todavia no tiene notas en sus asignaturas.")
-                    else:
-                        print(f"El alumno {nombre_alumno} no tiene asignaturas matriculadas.")
-                else:
-                    print(f"El alumno con el nombre {nombre_alumno} no ha sido encontrado.")
-            else:
-                print("El nombre del alumno a buscar no puede estar vacio.")
-        else:
-            print("La variable nombre_alumno tiene que ser de tipo string.")
+        # STUB
+        pass
 
 pro = Asignatura("Programación", 312)
 djk = Asignatura("Digitalización", 104)
@@ -192,7 +141,6 @@ agongon = Alumno("Andrea", [pro, djk, itk, ssf, bae, lnd, ets], {djk: 7, itk: 6.
 fromgom = Alumno("Fernando", [pro], {pro: 7.8})
 aromchi = Alumno("Alonso", [], {})
 
-"""
 cifpcm_daw = Instituto([aromgon, agongon, fromgom])
 
 agongon.poner_nota(pro, 7.4)
@@ -203,11 +151,6 @@ fromgom.poner_nota(ets, 6.2)
 cifpcm_daw.aniadir_alumno(aromchi)
 aromchi.matricular(bae)
 
-cifpcm_daw.mostrar_expediente("Alejandro")
-print()
-cifpcm_daw.mostrar_expediente("Andrea")
-print()
-cifpcm_daw.mostrar_expediente("Fernando")
-print()
-cifpcm_daw.mostrar_expediente("Alonso")
+"""
+cifpcm_daw.mostrar_expediente()
 """
