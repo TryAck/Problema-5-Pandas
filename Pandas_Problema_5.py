@@ -130,13 +130,15 @@ class Instituto:
             print("La variable alumno tiene que ser un objeto de tipo Alumno.")
 
     def mostrar_expediente(self):
-        # TODO: Hacer que los objetos Asignatura en la tabla muestren su nombre
         # TODO: Asignar "Sin nota" en las notas cuando haya una asignatura matriculada, pero no tenga nota
         # TODO: Asignar "No matriculada" en las notas cuando no este matriculada en una asignatura.
         expediente = pd.DataFrame()
 
         for alumno in self.alumnos:
             expediente = pd.concat([expediente, alumno.notas], axis=1)
+
+        for asignatura in expediente.index:
+            expediente = expediente.rename(index = {asignatura: asignatura.nombre})
 
         print(expediente)
 
