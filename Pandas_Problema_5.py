@@ -130,8 +130,9 @@ class Instituto:
             print("La variable alumno tiene que ser un objeto de tipo Alumno.")
 
     def mostrar_expediente(self):
-        # TODO: Implementar la vista que termina mostrando todos los alumnos
         # TODO: Hacer que los objetos Asignatura en la tabla muestren su nombre
+        # TODO: Asignar "Sin nota" en las notas cuando haya una asignatura matriculada, pero no tenga nota
+        # TODO: Asignar "No matriculada" en las notas cuando no este matriculada en una asignatura.
         asignaturas_expediente = self.alumnos[0].notas.index
 
         for alumno in self.alumnos:
