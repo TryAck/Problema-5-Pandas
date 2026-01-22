@@ -132,9 +132,22 @@ class Instituto:
     def mostrar_expediente(self):
         # TODO: Implementar la vista que termina mostrando todos los alumnos
         # TODO: Hacer que los objetos Asignatura en la tabla muestren su nombre
+        asignaturas_expediente = self.alumnos[0].notas.index
 
-        # STUB
-        pass
+        for alumno in self.alumnos:
+            for asignatura in alumno.notas.index:
+                if asignatura not in asignaturas_expediente:
+                    asignaturas_expediente = asignaturas_expediente.append(pd.Index([asignatura]))
+
+        asignaturas_expediente.name = "Asignaturas"
+
+        expediente = pd.DataFrame(index = asignaturas_expediente)
+
+        for alumno in self.alumnos:
+            expediente = expediente.merge(alumno.notas, how = "outer", left_index = True, right_index = True)
+
+        print(expediente)
+
 
 pro = Asignatura("Programación", 312)
 djk = Asignatura("Digitalización", 104)
@@ -159,6 +172,4 @@ fromgom.poner_nota(ets, 6.2)
 cifpcm_daw.aniadir_alumno(aromchi)
 aromchi.matricular(bae)
 
-"""
 cifpcm_daw.mostrar_expediente()
-"""
