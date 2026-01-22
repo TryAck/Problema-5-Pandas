@@ -50,6 +50,8 @@ class Alumno:
                         self.nombre = nombre
                         self.asignaturas = asignaturas
                         self.notas = pd.DataFrame(data = notas.values(), index = notas.keys(), columns = [nombre])
+                        # Añadir un titulo a la columna de indices (asignaturas)
+                        self.notas.index.name = "Asignaturas"
                     else:
                         raise TypeError("La variable notas tiene que ser de tipo Diccionario, con llaves de tipo Asignatura, y notas entre 0 a 10.")
                 else:
@@ -89,6 +91,9 @@ class Alumno:
                         else:
                             # La asignatura no esta en el DataFrame, concatenarla junto a la nota.
                             self.notas = pd.concat([self.notas, pd.DataFrame(data = [nota], index = [asignatura], columns = [self.nombre])])
+                            
+                            # Escribir de nuevo el nombre del la columna de los indices (Es sobreescrito por la operación anterior)
+                            self.notas.index.name = "Asignaturas"
                     else:
                         print("La nota tiene que estar entre 0 y 10.")
                 else:
