@@ -2,7 +2,7 @@
 
 Esta es la version Pandas del Problema 5.
 
-La version original estara disponible en `Problema_5.py`, ya que comenze a hacerlo sin git.
+La version original estara disponible en `Problema_5.py`, ya que comenze a hacerlo sin git. Ademas, la version previa a la revision de como estaba tratando con la entrada estara disponible bajo el branch `antigua`.
 
 ## Objetivos
 
