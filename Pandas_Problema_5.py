@@ -133,19 +133,10 @@ class Instituto:
         # TODO: Hacer que los objetos Asignatura en la tabla muestren su nombre
         # TODO: Asignar "Sin nota" en las notas cuando haya una asignatura matriculada, pero no tenga nota
         # TODO: Asignar "No matriculada" en las notas cuando no este matriculada en una asignatura.
-        asignaturas_expediente = self.alumnos[0].notas.index
+        expediente = pd.DataFrame()
 
         for alumno in self.alumnos:
-            for asignatura in alumno.notas.index:
-                if asignatura not in asignaturas_expediente:
-                    asignaturas_expediente = asignaturas_expediente.append(pd.Index([asignatura]))
-
-        asignaturas_expediente.name = "Asignaturas"
-
-        expediente = pd.DataFrame(index = asignaturas_expediente)
-
-        for alumno in self.alumnos:
-            expediente = expediente.merge(alumno.notas, how = "outer", left_index = True, right_index = True)
+            expediente = pd.concat([expediente, alumno.notas], axis=1)
 
         print(expediente)
 
