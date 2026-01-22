@@ -105,13 +105,16 @@ class Instituto:
     # Metodo constructor
     def __init__(self, alumnos):
         if (type(alumnos) == list):
-            # Comprobar si la lista alumnos solo contiene objetos Alumno
-            for alumno in alumnos:
-                if (not isinstance(alumno, Alumno)):
-                    raise TypeError("La lista alumnos solo puede contener objetos de tipo Alumno.")
+            if (len(alumnos) != 0):
+                # Comprobar si la lista alumnos solo contiene objetos Alumno
+                for alumno in alumnos:
+                    if (not isinstance(alumno, Alumno)):
+                        raise TypeError("La lista alumnos solo puede contener objetos de tipo Alumno.")
 
-            # La lista solo tiene objetos Alumno
-            self.alumnos = alumnos
+                # La lista solo tiene objetos Alumno
+                self.alumnos = alumnos
+            else:
+                raise ValueError("La lista alumnos no puede estar vacia.")
         else:
             raise TypeError("La variable alumnos tiene que ser una lista de objetos tipo Alumno.")
 
