@@ -132,11 +132,15 @@ class Instituto:
     def mostrar_expediente(self):
         # TODO: Asignar "Sin nota" en las notas cuando haya una asignatura matriculada, pero no tenga nota
         # TODO: Asignar "No matriculada" en las notas cuando no este matriculada en una asignatura.
+
+        # expediente es declarado como DataFrame vacio para poder concatenar las notas
         expediente = pd.DataFrame()
 
+        # Concatenacion de notas (axis = 1 especifica que concatene columnas en vez de filas)
         for alumno in self.alumnos:
             expediente = pd.concat([expediente, alumno.notas], axis=1)
 
+        # Modificar el indice para mostrar los nombres de las asignaturas en vez de sus objetos
         for asignatura in expediente.index:
             expediente = expediente.rename(index = {asignatura: asignatura.nombre})
 
