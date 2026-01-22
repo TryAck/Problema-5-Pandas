@@ -1,8 +1,10 @@
-# Problema 5, versión Pandas
+# Problema 5, versión Pandas, previa a la revision
 
-Esta es la version Pandas del Problema 5.
+Esta es la version Pandas del Problema 5. Tambien es el plan original, antes de la revision que mantuvo la entrada siendo un diccionario.
 
 La version original estara disponible en `Problema_5.py`, ya que comenze a hacerlo sin git.
+
+**Este branch esta aqui por motivos de documentación, no completare esta versión del problema.**
 
 ## Objetivos
 
