@@ -6,9 +6,9 @@ import pandas as pd
 class Asignatura:
     # Metodo constructor
     def __init__(self, nombre, creditos):
-        if (type(nombre) == str):
+        if (isinstance(nombre, str)):
             if (nombre != ""):
-                if (type(creditos) == int):
+                if (isinstance(creditos, int)):
                     if (creditos > 0):
                         self.nombre = nombre
                         self.creditos = creditos
@@ -24,9 +24,9 @@ class Asignatura:
 class Alumno:
     # Metodo constructor
     def __init__(self, nombre, asignaturas, notas):
-        if (type(nombre) == str):
+        if (isinstance(nombre, str)):
             if (nombre != ""):
-                if (type(asignaturas) == list):
+                if (isinstance(asignaturas, list)):
                     # Comprobar si la lista asignaturas solo contiene objetos Asignatura
                     for asignatura in asignaturas:
                         if (not isinstance(asignatura, Asignatura)):
@@ -34,14 +34,14 @@ class Alumno:
 
                     # La lista solo tiene objetos Asignatura
 
-                    if (type(notas) == dict):
+                    if (isinstance(notas, dict)):
                         # Comprobar si las llaves son objetos Asignatura y los valores son enteros o decimales, y validos.
                         for asignatura, nota in notas.items():
                             if (not isinstance(asignatura, Asignatura)):
                                 raise TypeError("Las llaves del diccionario de notas solo pueden ser objetos de tipo Asignatura.")
                             if (asignatura not in asignaturas):
                                 raise RuntimeError(f"El alumno {nombre} no tiene la asignatura {asignatura.nombre} matriculada, y por lo tanto no puede recibir una nota en ella.")
-                            if (type(nota) not in [int, float]):
+                            if (not isinstance(nota, (int, float))):
                                 raise TypeError("Los valores del diccionario de notas solo pueden ser de tipo int o float.")
                             if (nota < 0 or nota > 10):
                                 raise ValueError("Las notas dentro del diccionario notas solo pueden estar entre 0 y 10.")
@@ -83,7 +83,7 @@ class Alumno:
                 i += 1
 
             if (self.asignaturas[i] == asignatura):
-                if (type(nota) in [int, float]):
+                if (isinstance(nota, (int, float))):
                     if (0 <= nota <= 10):
                         if (asignatura in self.notas.index):
                             # La asignatura ya esta en el DataFrame, actualizar la nota.
@@ -109,7 +109,7 @@ class Alumno:
 class Instituto:
     # Metodo constructor
     def __init__(self, alumnos):
-        if (type(alumnos) == list):
+        if (isinstance(alumnos, list)):
             if (len(alumnos) != 0):
                 # Comprobar si la lista alumnos solo contiene objetos Alumno
                 for alumno in alumnos:
